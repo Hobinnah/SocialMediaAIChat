@@ -12,7 +12,7 @@ export const postWebhook = (req, res) =>{
     let body = req.body;
 
     // Check the webhook event is from a Page subscription
-    if (body.object === 'instagram') {
+    if (body.object === 'instagram' && body.entry !== undefined) {
 
         // Iterate over each entry - there may be multiple if batched
         body.entry.forEach(function(entry) {
@@ -117,7 +117,7 @@ function callSendAPI(sender_psid, recipient_IGSID, response) {
             "json": request_body
         }, (err, res, body) => {
             if (!err) {
-                console.log('message reply sent!', err);
+                console.log('message reply sent!');
             } else {
                 console.error("Unable to send message:" + err);
             }
