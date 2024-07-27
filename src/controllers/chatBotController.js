@@ -25,13 +25,14 @@ export const postWebhook = (req, res) =>{
 
             // Get the sender PSID
             let sender_psid = webhook_event.sender.id;
+            let recipient_IGSID = webhook_event.recipient.id;
             console.log('Sender PSID: ' + sender_psid);
             
             // Check if the event is a message or postback and
             // pass the event to the appropriate handler function
             if (webhook_event.message) {
                 console.log('handleMessage called');
-                handleMessage(sender_psid, webhook_event.message);
+                handleMessage(sender_psid, recipient_IGSID, webhook_event.message);
             } else if (webhook_event.postback) {
                 console.log('handlePostback called');
                 handlePostback(sender_psid, webhook_event.postback);
@@ -74,53 +75,6 @@ export const getWebhook = (req, res) => {
     }
 };
 
-// Handles messages events
-// function handleMessage(sender_psid, received_message) {
-//     let response;
-//
-//     // Check if the message contains text
-//     if (received_message.text) {
-//
-//         // Create the payload for a basic text message
-//         response = {
-//             "text": `You sent the message: "${received_message.text}". Now send me an image!`
-//         }
-//     } else if (received_message.attachments) {
-//
-//     // Gets the URL of the message attachment
-//     let attachment_url = received_message.attachments[0].payload.url;
-//         response = {
-//             "attachment": {
-//                 "type": "template",
-//                 "payload": {
-//                     "template_type": "generic",
-//                     "elements": [{
-//                         "title": "Is this the right picture?",
-//                         "subtitle": "Tap a button to answer.",
-//                         "image_url": attachment_url,
-//                         "buttons": [
-//                             {
-//                                 "type": "postback",
-//                                 "title": "Yes!",
-//                                 "payload": "yes",
-//                             },
-//                             {
-//                                 "type": "postback",
-//                                 "title": "No!",
-//                                 "payload": "no",
-//                             }
-//                         ],
-//                     }]
-//                 }
-//             }
-//         }
-//
-// }
-//
-// // Sends the response message
-//     callSendAPI(sender_psid, response);
-// }
-
 // Handles messaging_postbacks events
 function handlePostback(sender_psid, received_postback) {
     let response;
@@ -139,28 +93,33 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
+function callSendAPI(sender_psid, recipient_IGSID, response) {
     // Construct the message body
     let request_body = {
         "recipient": {
-            "id": sender_psid
+            "id": recipient_IGSID
         },
         "message": { "text": response }
     };
 
-    // Send the HTTP request to the Messenger Platform
-    request({
-        "uri": "https://graph.facebook.com/v7.0/me/messages",
-        "qs": { "access_token": process.env.FB_PAGE_TOKEN },
-        "method": "POST",
-        "json": request_body
-    }, (err, res, body) => {
-        if (!err) {
-            console.log('message sent!');
-        } else {
-            console.error("Unable to send message:" + err);
-        }
-    });
+    let registeredAccount = 17841403463308688;
+
+    if (sender_psid !== registeredAccount) {
+
+        // Send the HTTP request to the Messenger Platform
+        request({
+            "uri": "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages",
+            "qs": { "access_token": process.env.FB_PAGE_TOKEN },
+            "method": "POST",
+            "json": request_body
+        }, (err, res, body) => {
+            if (!err) {
+                console.log('message sent!');
+            } else {
+                console.error("Unable to send message:" + err);
+            }
+        });
+    }
 }
 
 // function firstTrait(nlp, name) {
@@ -171,7 +130,7 @@ function firstTrait(nlp, name) {
     return nlp && nlp.entities && nlp.traits[name] && nlp.traits[name][0];
 }
 
-function handleMessage(sender_psid, message) {
+function handleMessage(sender_psid, recipient_IGSID, message) {
     //handle message for react, like press like button
     // id like button: sticker_id 369239263222822
 
@@ -190,21 +149,22 @@ function handleMessage(sender_psid, message) {
         }
     });
 
+    console.log('It got here');
     if(entityChosen === ""){
         //default
-        callSendAPI(sender_psid,`The bot is needed more training, try to say "thanks a lot" or "hi" to the bot` );
+        callSendAPI(sender_psid, recipient_IGSID, `The bot is needed more training, try to say "thanks a lot" or "hi" to the bot` );
     }else{
        if(entityChosen === "wit$greetings"){
            //send greetings message
-           callSendAPI(sender_psid,'Hi there! This bot is created by Hary Pham. Watch more videos on HaryPhamDev Channel!');
+           callSendAPI(sender_psid, recipient_IGSID,'Hi there! This bot is created by Hary Pham. Watch more videos on HaryPhamDev Channel!');
        }
        if(entityChosen === "wit$thanks"){
            //send thanks message
-           callSendAPI(sender_psid,`You 're welcome!`);
+           callSendAPI(sender_psid, recipient_IGSID, `You 're welcome!`);
        }
         if(entityChosen === "wit$bye"){
             //send bye message
-            callSendAPI(sender_psid,'bye-bye!');
+            callSendAPI(sender_psid, recipient_IGSID, 'bye-bye!');
         }
     }
 }
@@ -258,3 +218,51 @@ let callSendAPIWithTemplate = (sender_psid) => {
  //   getWebhook: getWebhook,
  //   postWebhook: postWebhook
 //};
+
+
+// Handles messages events
+// function handleMessage(sender_psid, received_message) {
+//     let response;
+//
+//     // Check if the message contains text
+//     if (received_message.text) {
+//
+//         // Create the payload for a basic text message
+//         response = {
+//             "text": `You sent the message: "${received_message.text}". Now send me an image!`
+//         }
+//     } else if (received_message.attachments) {
+//
+//     // Gets the URL of the message attachment
+//     let attachment_url = received_message.attachments[0].payload.url;
+//         response = {
+//             "attachment": {
+//                 "type": "template",
+//                 "payload": {
+//                     "template_type": "generic",
+//                     "elements": [{
+//                         "title": "Is this the right picture?",
+//                         "subtitle": "Tap a button to answer.",
+//                         "image_url": attachment_url,
+//                         "buttons": [
+//                             {
+//                                 "type": "postback",
+//                                 "title": "Yes!",
+//                                 "payload": "yes",
+//                             },
+//                             {
+//                                 "type": "postback",
+//                                 "title": "No!",
+//                                 "payload": "no",
+//                             }
+//                         ],
+//                     }]
+//                 }
+//             }
+//         }
+//
+// }
+//
+// // Sends the response message
+//     callSendAPI(sender_psid, response);
+// }
