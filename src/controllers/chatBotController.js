@@ -103,6 +103,7 @@ function callSendAPI(sender_psid, recipient_IGSID, response) {
     };
 
     let registeredAccount = 17841403463308688;
+    console.log('It got here');
 
     if (sender_psid !== registeredAccount) {
 
@@ -114,7 +115,7 @@ function callSendAPI(sender_psid, recipient_IGSID, response) {
             "json": request_body
         }, (err, res, body) => {
             if (!err) {
-                console.log('message sent!');
+                console.log('message reply sent!', err);
             } else {
                 console.error("Unable to send message:" + err);
             }
