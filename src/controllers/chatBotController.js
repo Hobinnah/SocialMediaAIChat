@@ -103,14 +103,16 @@ function callSendAPI(sender_psid, recipient_IGSID, response) {
     };
 
     let registeredAccount = 17841403463308688;
-    console.log('It got here');
-
+    
     if (sender_psid !== registeredAccount) {
 
+        console.log('It got here');
+        const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
+        console.log("url: " + url);
         // Send the HTTP request to the Messenger Platform
         request({
-            "uri": "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages",
-            "qs": { "access_token": process.env.FB_PAGE_TOKEN },
+            "uri": url,
+            //"qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
             "method": "POST",
             "json": request_body
         }, (err, res, body) => {
