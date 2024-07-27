@@ -1,7 +1,13 @@
-require("dotenv").config();
 import request from "request";
+import dotenv from "dotenv";
 
-let postWebhook = (req, res) =>{
+
+dotenv.config();
+
+
+//dotenv.config();
+
+export const postWebhook = (req, res) =>{
     // Parse the request body from the POST
     let body = req.body;
 
@@ -40,7 +46,7 @@ let postWebhook = (req, res) =>{
     }
 };
 
-let getWebhook = (req, res) => {
+export const getWebhook = (req, res) => {
     // Your verify token. Should be a random string.
     let VERIFY_TOKEN = process.env.MY_VERIFY_FB_TOKEN;
 
@@ -246,7 +252,7 @@ let callSendAPIWithTemplate = (sender_psid) => {
     });
 };
 
-module.exports = {
-  postWebhook: postWebhook,
-  getWebhook: getWebhook
-};
+//module.exports = {
+ //   getWebhook: getWebhook,
+ //   postWebhook: postWebhook
+//};

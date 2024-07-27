@@ -1,15 +1,17 @@
 import express from "express";
-import homepageController from "../controllers/homepageController";
-import chatBotController from "../controllers/chatBotController";
+import { getHomepage } from "../controllers/homepageController.js";
+import { postWebhook } from "../controllers/chatBotController.js";
+import { getWebhook } from "../controllers/chatBotController.js";
+
 
 let router = express.Router();
 
-let initWebRoutes = (app)=> {
-    router.get("/", homepageController.getHomepage);
-    router.get("/webhook", chatBotController.getWebhook);
-    router.post("/webhook", chatBotController.postWebhook);
+export const initWebRoutes = (app)=> {
+    router.get("/", getHomepage);
+    router.get("/webhook", getWebhook);
+    router.post("/webhook", postWebhook);
 
     return app.use("/", router);
 };
 
-module.exports = initWebRoutes;
+//module.exports = initWebRoutes;

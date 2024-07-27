@@ -1,7 +1,8 @@
-let getHomepage = (req, res) => {
+
+export const getHomepage = (req, res) => {
     return res.render("homepage.ejs");
 };
 
-module.exports = {
-    getHomepage: getHomepage
-};
+//module.exports = {
+ //   getHomepage: getHomepage
+//};
