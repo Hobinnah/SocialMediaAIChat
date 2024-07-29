@@ -101,10 +101,10 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-async function callSendAPI(sender_psid, response) {
+async function callSendAPI(sender_psid, query) {
     // Construct the message body
 
-    response =  await AskAI();   //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
+    response =  await AskAI(query);   //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
     let request_body = {
         "recipient": {
             "id": sender_psid
@@ -112,7 +112,7 @@ async function callSendAPI(sender_psid, response) {
         "message": { "text": response }
     };
 
-    console.log('It got here. I will send a reply: ', response);
+    console.log('It got here. I will send a reply: ', query);
     const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
     console.log("url: " + url);
     // Send the HTTP request to the Messenger Platform
@@ -140,7 +140,7 @@ async function AskAI(query) {
     };
 
     console.log('User query : ', query);
-    const url = "http://ai.primecrestfx.com";
+    const url = "http://ai.primecrestfx.com/ai/api/MetaWebhook/SendIGResponse";
     console.log("url: " + url);
     // Send the HTTP request to the Messenger Platform
     request({
