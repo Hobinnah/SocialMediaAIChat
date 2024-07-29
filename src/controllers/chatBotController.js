@@ -106,9 +106,16 @@ async function callSendAPI(sender_psid, query) {
 
     let res = await AskAI(query); //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
     
-    if (res == '' || res == undefined || res.body == undefined) return;
+    if (res == '' || res == undefined || res.body == undefined) {
+        console.log('It got here. But returning');
+        console.log(JSON.stringify(res));
+        return;
+    }
 
+    console.log(res);
+    console.log(JSON.stringify(res));
     let chunk = res.split(/\r?\n/);
+    console.log('chunk len : '+ chunk.length)
 
     let request_body = {
         "recipient": {
@@ -155,11 +162,7 @@ async function AskAI(query) {
         "json": request_body
     }, (err, res, body) => {
         if (!err) {
-            console.log(res);
-            console.log(JSON.stringify(res));
-             //if (res.ok) {
                 return res.body;
-            // }
         } else {
             console.error("Unable to send message:" + err);
         }
