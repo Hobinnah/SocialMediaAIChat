@@ -14,7 +14,7 @@ export const postWebhook = (req, res) =>{
     console.log(JSON.stringify(req.body)); 
 
     // Check the webhook event is from a Page subscription
-    if (body.object === 'instagram' && body.entry !== undefined) { // && body.entry.length > 0
+    if (body.object === 'instagram' && body.entry !== undefined && body.entry.length > 0) { // 
 
         // Iterate over each entry - there may be multiple if batched
         body.entry.forEach(function(entry) {
