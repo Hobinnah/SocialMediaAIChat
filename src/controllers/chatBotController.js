@@ -24,10 +24,10 @@ export const postWebhook = (req, res) =>{
                 let webhook_event = entry.messaging[0];
                 console.log('Event: ', webhook_event);
 
-                // Get the sender PSID
+                // Get the sender PSID 
                 let sender_psid = webhook_event.sender.id;
                 let recipient_IGSID = webhook_event.recipient.id;
-                //let registeredAccount = 17841403463308688;
+
                 console.log('Sender PSID: ' + sender_psid +'. registeredAccount: '+ registeredAccount);
                                 
                 // Check if the event is a message or postback and
@@ -36,7 +36,8 @@ export const postWebhook = (req, res) =>{
                 {
                     if (webhook_event.message) {
                         console.log('handleMessage called');
-                        handleMessage(sender_psid, webhook_event.message);
+                        callSendAPI(sender_psid, "");
+                        //handleMessage(sender_psid, webhook_event.message);
                     } else if (webhook_event.postback) {
                         console.log('handlePostback called');
                         handlePostback(sender_psid, webhook_event.postback);
@@ -102,6 +103,8 @@ function handlePostback(sender_psid, received_postback) {
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
     // Construct the message body
+
+    response =`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
     let request_body = {
         "recipient": {
             "id": sender_psid
