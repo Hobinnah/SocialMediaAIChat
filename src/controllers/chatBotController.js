@@ -104,7 +104,7 @@ function handlePostback(sender_psid, received_postback) {
 async function callSendAPI(sender_psid, query) {
     // Construct the message body
 
-    response =  await AskAI(query);   //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
+    let response =  await AskAI(query);   //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
     let request_body = {
         "recipient": {
             "id": sender_psid
