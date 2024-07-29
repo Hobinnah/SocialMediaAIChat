@@ -14,14 +14,14 @@ export const postWebhook = (req, res) =>{
     console.log(JSON.stringify(req.body)); 
 
     // Check the webhook event is from a Page subscription
-    if (body.object === 'instagram' && body.entry !== undefined && body.entry.length > 0) {
+    if (body.object === 'instagram' && body.entry !== undefined) { // && body.entry.length > 0
 
         // Iterate over each entry - there may be multiple if batched
         body.entry.forEach(function(entry) {
 
             // Gets the body of the webhook event
             console.log(entry);
-            if (entry.messaging !== undefined) {
+            //if (entry.messaging !== undefined) {
                 let webhook_event = entry.messaging[0];
                 console.log('Event: ', webhook_event);
 
@@ -39,7 +39,7 @@ export const postWebhook = (req, res) =>{
                     console.log('handlePostback called');
                     handlePostback(sender_psid, webhook_event.postback);
                 }
-            }
+            //}
 
         });
 
