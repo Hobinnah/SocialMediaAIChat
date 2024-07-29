@@ -4,8 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-
-//dotenv.config();
+const registeredAccount = 17841403463308688;
 
 export const postWebhook = (req, res) =>{
     // Parse the request body from the POST
@@ -28,7 +27,7 @@ export const postWebhook = (req, res) =>{
                 // Get the sender PSID
                 let sender_psid = webhook_event.sender.id;
                 let recipient_IGSID = webhook_event.recipient.id;
-                let registeredAccount = 17841403463308688;
+                //let registeredAccount = 17841403463308688;
                 console.log('Sender PSID: ' + sender_psid +'. registeredAccount: '+ registeredAccount);
                                 
                 // Check if the event is a message or postback and
