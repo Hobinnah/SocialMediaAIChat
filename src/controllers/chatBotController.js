@@ -104,37 +104,35 @@ function handlePostback(sender_psid, received_postback) {
 async function callSendAPI(sender_psid, query) {
     // Construct the message body
 
-    await AskAI(query).then(res =>
-    {
-        if (res == '') return;
-        let chunk = res.split(/\r?\n/);
+    let res = await AskAI(query); //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
     
-        let request_body = {
-            "recipient": {
-                "id": sender_psid
-            },
-            "message": { "text": chunk[0] }
-        };
-    
-        console.log('It got here. I will send a reply: ', query);
-        const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
-        console.log("url: " + url);
-        // Send the HTTP request to the Messenger Platform
-        request({
-            "uri": url,
-            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
-            "method": "POST",
-            "json": request_body
-        }, (err, res, body) => {
-            if (!err) {
-                console.log('message reply sent!');
-            } else {
-                console.error("Unable to send message:" + err);
-            }
-        });
-        
-    });   //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
-    
+    if (res == '' || res == undefined || res.body == undefined) return;
+
+    let chunk = res.split(/\r?\n/);
+
+    let request_body = {
+        "recipient": {
+            "id": sender_psid
+        },
+        "message": { "text": chunk[0] }
+    };
+
+    console.log('It got here. I will send a reply: ', query);
+    const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
+    console.log("url: " + url);
+    // Send the HTTP request to the Messenger Platform
+    request({
+        "uri": url,
+        "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log('message reply sent!');
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
     
 }
 
@@ -151,7 +149,7 @@ async function AskAI(query) {
     const url = "http://ai.primecrestfx.com/ai/api/MetaWebhook/SendIGResponse";
     console.log("url: " + url);
     // Send the HTTP request to the Messenger Platform
-    request({
+   await request({
         "uri": url,
         "method": "POST",
         "json": request_body
