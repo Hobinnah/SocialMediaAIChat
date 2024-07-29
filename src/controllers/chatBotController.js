@@ -121,7 +121,7 @@ function callSendAPI(sender_psid, recipient_IGSID, response) {
         // Send the HTTP request to the Messenger Platform
         request({
             "uri": url,
-            //"qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
             "method": "POST",
             "json": request_body
         }, (err, res, body) => {
