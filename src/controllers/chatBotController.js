@@ -12,7 +12,7 @@ export const postWebhook = (req, res) =>{
     let body = req.body;
     console.log(body.entry);
     console.log(JSON.stringify(req.body)); 
-    
+
     // Check the webhook event is from a Page subscription
     if (body.object === 'instagram' && body.entry !== undefined) {
 
@@ -114,7 +114,7 @@ function callSendAPI(sender_psid, recipient_IGSID, response) {
         // Send the HTTP request to the Messenger Platform
         request({
             "uri": url,
-            //"qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
             "method": "POST",
             "json": request_body
         }, (err, res, body) => {
@@ -154,7 +154,6 @@ function handleMessage(sender_psid, recipient_IGSID, message) {
         }
     });
 
-    console.log('It got here');
     if(entityChosen === ""){
         //default
         callSendAPI(sender_psid, recipient_IGSID, `The bot is needed more training, try to say "thanks a lot" or "hi" to the bot` );
