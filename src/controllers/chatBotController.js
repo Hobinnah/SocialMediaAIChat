@@ -14,30 +14,31 @@ export const postWebhook = (req, res) =>{
     console.log(JSON.stringify(req.body)); 
 
     // Check the webhook event is from a Page subscription
-    if (body.object === 'instagram' && body.entry !== undefined) {
+    if (body.object === 'instagram' && body.entry !== undefined && body.entry.length > 0) {
 
         // Iterate over each entry - there may be multiple if batched
         body.entry.forEach(function(entry) {
 
             // Gets the body of the webhook event
             console.log(entry);
-            let webhook_event = entry.messaging[0];
-            console.log('Event: ', webhook_event);
+            if (entry.messaging !== undefined) {
+                let webhook_event = entry.messaging[0];
+                console.log('Event: ', webhook_event);
 
-
-            // Get the sender PSID
-            let sender_psid = webhook_event.sender.id;
-            let recipient_IGSID = webhook_event.recipient.id;
-            console.log('Sender PSID: ' + sender_psid);
-            
-            // Check if the event is a message or postback and
-            // pass the event to the appropriate handler function
-            if (webhook_event.message) {
-                console.log('handleMessage called');
-                handleMessage(sender_psid, recipient_IGSID, webhook_event.message);
-            } else if (webhook_event.postback) {
-                console.log('handlePostback called');
-                handlePostback(sender_psid, webhook_event.postback);
+                // Get the sender PSID
+                let sender_psid = webhook_event.sender.id;
+                let recipient_IGSID = webhook_event.recipient.id;
+                console.log('Sender PSID: ' + sender_psid);
+                
+                // Check if the event is a message or postback and
+                // pass the event to the appropriate handler function
+                if (webhook_event.message) {
+                    console.log('handleMessage called');
+                    handleMessage(sender_psid, recipient_IGSID, webhook_event.message);
+                } else if (webhook_event.postback) {
+                    console.log('handlePostback called');
+                    handlePostback(sender_psid, webhook_event.postback);
+                }
             }
 
         });
@@ -108,7 +109,7 @@ function callSendAPI(sender_psid, recipient_IGSID, response) {
     
     if (sender_psid !== registeredAccount) {
 
-        console.log('It got here');
+        console.log('It got here. I will send a reply: ', response);
         const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
         console.log("url: " + url);
         // Send the HTTP request to the Messenger Platform
