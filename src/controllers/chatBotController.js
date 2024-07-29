@@ -149,12 +149,12 @@ function handleMessage(sender_psid, recipient_IGSID, message) {
 
     let entitiesArr = [ "wit$greetings", "wit$thanks", "wit$bye" ];
     let entityChosen = "";
-    entitiesArr.forEach((name) => {
-        let entity = firstTrait(message.nlp, name);
-        if (entity && entity.confidence > 0.8) {
-            entityChosen = name;
-        }
-    });
+    // entitiesArr.forEach((name) => {
+    //     let entity = firstTrait(message.nlp, name);
+    //     if (entity && entity.confidence > 0.8) {
+    //         entityChosen = name;
+    //     }
+    // });
 
     if(entityChosen === ""){
         //default
