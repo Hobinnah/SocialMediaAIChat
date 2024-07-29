@@ -14,7 +14,7 @@ export const postWebhook = (req, res) =>{
     console.log(JSON.stringify(req.body)); 
 
     // Check the webhook event is from a Page subscription
-    if (body.object === 'instagram' && body.entry !== undefined && body.entry.length > 0) { // 
+    if (body.object === 'instagram' && body.entry !== undefined && body.entry.length > 0) { 
 
         // Iterate over each entry - there may be multiple if batched
         body.entry.forEach(function(entry) {
@@ -37,7 +37,7 @@ export const postWebhook = (req, res) =>{
                 {
                     if (webhook_event.message) {
                         console.log('handleMessage called');
-                        handleMessage(sender_psid, recipient_IGSID, webhook_event.message);
+                        handleMessage(sender_psid, webhook_event.message);
                     } else if (webhook_event.postback) {
                         console.log('handlePostback called');
                         handlePostback(sender_psid, webhook_event.postback);
@@ -46,7 +46,6 @@ export const postWebhook = (req, res) =>{
                     console.log('I wont reply');
                 }
             //}
-
         });
 
         // Return a '200 OK' response to all events
@@ -102,36 +101,32 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, recipient_IGSID, response) {
+function callSendAPI(sender_psid, response) {
     // Construct the message body
     let request_body = {
         "recipient": {
-            "id": recipient_IGSID
+            "id": sender_psid
         },
         "message": { "text": response }
     };
 
-    let registeredAccount = 17841403463308688;
+    console.log('It got here. I will send a reply: ', response);
+    const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
+    console.log("url: " + url);
+    // Send the HTTP request to the Messenger Platform
+    request({
+        "uri": url,
+        "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log('message reply sent!');
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
     
-    if (parseInt(sender_psid) !== parseInt(registeredAccount)) {
-
-        console.log('It got here. I will send a reply: ', response);
-        const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
-        console.log("url: " + url);
-        // Send the HTTP request to the Messenger Platform
-        request({
-            "uri": url,
-            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
-            "method": "POST",
-            "json": request_body
-        }, (err, res, body) => {
-            if (!err) {
-                console.log('message reply sent!');
-            } else {
-                console.error("Unable to send message:" + err);
-            }
-        });
-    }
 }
 
 // function firstTrait(nlp, name) {
