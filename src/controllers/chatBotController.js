@@ -33,7 +33,7 @@ export const postWebhook = (req, res) =>{
                                 
                 // Check if the event is a message or postback and
                 // pass the event to the appropriate handler function
-                if (sender_psid !== registeredAccount)
+                if (parseInt(sender_psid) !== parseInt(registeredAccount))
                 {
                     if (webhook_event.message) {
                         console.log('handleMessage called');
@@ -113,7 +113,7 @@ function callSendAPI(sender_psid, recipient_IGSID, response) {
 
     let registeredAccount = 17841403463308688;
     
-    if (sender_psid !== registeredAccount) {
+    if (parseInt(sender_psid) !== parseInt(registeredAccount)) {
 
         console.log('It got here. I will send a reply: ', response);
         const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
