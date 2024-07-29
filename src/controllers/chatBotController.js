@@ -42,6 +42,8 @@ export const postWebhook = (req, res) =>{
                         console.log('handlePostback called');
                         handlePostback(sender_psid, webhook_event.postback);
                     }
+                } else {
+                    console.log('I wont reply');
                 }
             //}
 
@@ -161,7 +163,7 @@ function handleMessage(sender_psid, recipient_IGSID, message) {
 
     if(entityChosen === ""){
         //default
-        callSendAPI(sender_psid, recipient_IGSID, `The bot is needed more training, try to say "thanks a lot" or "hi" to the bot` );
+        callSendAPI(sender_psid, recipient_IGSID, `The bot needs more training, try to say "thanks a lot" or "hi" to the bot` );
     }else{
        if(entityChosen === "wit$greetings"){
            //send greetings message
