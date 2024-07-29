@@ -26,9 +26,9 @@ export const postWebhook = (req, res) =>{
 
                 // Get the sender PSID 
                 let sender_psid = webhook_event.sender.id;
-                let recipient_IGSID = webhook_event.recipient.id;
+                let message = webhook_event.message.text;
 
-                console.log('Sender PSID: ' + sender_psid +'. registeredAccount: '+ registeredAccount);
+                console.log('Sender PSID: ' + sender_psid +'. registeredAccount: '+ registeredAccount +' message: '+ message);
                                 
                 // Check if the event is a message or postback and
                 // pass the event to the appropriate handler function
@@ -36,7 +36,7 @@ export const postWebhook = (req, res) =>{
                 {
                     if (webhook_event.message) {
                         console.log('handleMessage called');
-                        callSendAPI(sender_psid, "");
+                        callSendAPI(sender_psid, message);
                         //handleMessage(sender_psid, webhook_event.message);
                     } else if (webhook_event.postback) {
                         console.log('handlePostback called');
@@ -101,10 +101,10 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
+async function callSendAPI(sender_psid, response) {
     // Construct the message body
 
-    response =`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
+    response =  await AskAI();   //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
     let request_body = {
         "recipient": {
             "id": sender_psid
@@ -131,15 +131,42 @@ function callSendAPI(sender_psid, response) {
     
 }
 
-// function firstTrait(nlp, name) {
-//     return nlp && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
-// }
+// Sends response messages via the Send API
+async function AskAI(query) {
+    
+    // Construct the message body
+    let request_body = {
+        "question": query
+    };
+
+    console.log('User query : ', query);
+    const url = "http://ai.primecrestfx.com";
+    console.log("url: " + url);
+    // Send the HTTP request to the Messenger Platform
+    request({
+        "uri": url,
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log(res.text());
+            console.log(JSON.stringify(res));
+             if (response.ok) {
+                return res.text();
+             }
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
+    
+}
+
 
 function firstTrait(nlp, name) {
     return nlp && nlp.entities && nlp.traits[name] && nlp.traits[name][0];
 }
 
-function handleMessage(sender_psid, recipient_IGSID, message) {
+function handleMessage(sender_psid, message) {
     //handle message for react, like press like button
     // id like button: sticker_id 369239263222822
 
@@ -160,19 +187,19 @@ function handleMessage(sender_psid, recipient_IGSID, message) {
 
     if(entityChosen === ""){
         //default
-        callSendAPI(sender_psid, recipient_IGSID, `The bot needs more training, try to say "thanks a lot" or "hi" to the bot` );
+        callSendAPI(sender_psid, `The bot needs more training, try to say "thanks a lot" or "hi" to the bot` );
     }else{
        if(entityChosen === "wit$greetings"){
            //send greetings message
-           callSendAPI(sender_psid, recipient_IGSID,'Hi there! This bot is created by Hary Pham. Watch more videos on HaryPhamDev Channel!');
+           callSendAPI(sender_psid, 'Hi there! This bot is created by Hary Pham. Watch more videos on HaryPhamDev Channel!');
        }
        if(entityChosen === "wit$thanks"){
            //send thanks message
-           callSendAPI(sender_psid, recipient_IGSID, `You 're welcome!`);
+           callSendAPI(sender_psid, `You 're welcome!`);
        }
         if(entityChosen === "wit$bye"){
             //send bye message
-            callSendAPI(sender_psid, recipient_IGSID, 'bye-bye!');
+            callSendAPI(sender_psid, 'bye-bye!');
         }
     }
 }
@@ -221,12 +248,6 @@ let callSendAPIWithTemplate = (sender_psid) => {
         }
     });
 };
-
-//module.exports = {
- //   getWebhook: getWebhook,
- //   postWebhook: postWebhook
-//};
-
 
 // Handles messages events
 // function handleMessage(sender_psid, received_message) {
