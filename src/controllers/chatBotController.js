@@ -28,16 +28,20 @@ export const postWebhook = (req, res) =>{
                 // Get the sender PSID
                 let sender_psid = webhook_event.sender.id;
                 let recipient_IGSID = webhook_event.recipient.id;
-                console.log('Sender PSID: ' + sender_psid);
-                
+                let registeredAccount = 17841403463308688;
+                console.log('Sender PSID: ' + sender_psid +'. registeredAccount: '+ registeredAccount);
+                                
                 // Check if the event is a message or postback and
                 // pass the event to the appropriate handler function
-                if (webhook_event.message) {
-                    console.log('handleMessage called');
-                    handleMessage(sender_psid, recipient_IGSID, webhook_event.message);
-                } else if (webhook_event.postback) {
-                    console.log('handlePostback called');
-                    handlePostback(sender_psid, webhook_event.postback);
+                if (sender_psid !== registeredAccount)
+                {
+                    if (webhook_event.message) {
+                        console.log('handleMessage called');
+                        handleMessage(sender_psid, recipient_IGSID, webhook_event.message);
+                    } else if (webhook_event.postback) {
+                        console.log('handlePostback called');
+                        handlePostback(sender_psid, webhook_event.postback);
+                    }
                 }
             //}
 
