@@ -149,11 +149,11 @@ async function AskAI(query) {
         "json": request_body
     }, (err, res, body) => {
         if (!err) {
-            console.log(res.text());
+            console.log(res);
             console.log(JSON.stringify(res));
-             if (response.ok) {
-                return res.text();
-             }
+             //if (res.ok) {
+                return res;
+            // }
         } else {
             console.error("Unable to send message:" + err);
         }
