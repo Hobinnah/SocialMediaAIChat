@@ -136,7 +136,8 @@ async function AskAI(query) {
     
     // Construct the message body
     let request_body = {
-        "question": query
+        "question": query,
+        "documentID": "GetFitGym-faqs"
     };
 
     console.log('User query : ', query);
