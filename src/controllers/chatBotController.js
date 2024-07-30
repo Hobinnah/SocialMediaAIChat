@@ -116,30 +116,32 @@ function callSendAPI(sender_psid, query) {
         console.log(JSON.stringify(res));
         let chunk = res.split(/\r?\n/);
         console.log('chunk len : '+ chunk.length)
-    
-        let request_body = {
-            "recipient": {
-                "id": sender_psid
-            },
-            "message": { "text": chunk[0] }
-        };
-    
-        console.log('It got here. I will send a reply: ', query);
-        const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
-        console.log("url: " + url);
-        // Send the HTTP request to the Messenger Platform
-        request({
-            "uri": url,
-            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
-            "method": "POST",
-            "json": request_body
-        }, (err, res, body) => {
-            if (!err) {
-                console.log('message reply sent!');
-            } else {
-                console.error("Unable to send message:" + err);
-            }
-        });
+
+        for(let i=0; i < chunk.length; i++) {
+            let request_body = {
+                "recipient": {
+                    "id": sender_psid
+                },
+                "message": { "text": chunk[i] }
+            };
+        
+            console.log('It got here. I will send a reply: ', query);
+            const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
+            console.log("url: " + url);
+            // Send the HTTP request to the Messenger Platform
+            request({
+                "uri": url,
+                "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+                "method": "POST",
+                "json": request_body
+            }, (err, res, body) => {
+                if (!err) {
+                    console.log('message reply sent!');
+                } else {
+                    console.error("Unable to send message:" + err);
+                }
+            });
+        }
       })
       .catch(error => {
         console.error('Error fetching data:', error);
