@@ -106,6 +106,8 @@ function callSendAPI(sender_psid, query) {
 
     AskAI(query).then(res => {
         
+        console.log(res);
+        console.log(JSON.stringify(res));
         if (res == '' || res == undefined || res == undefined) {
             console.log('It got here. But returning');
             console.log(JSON.stringify(res));
