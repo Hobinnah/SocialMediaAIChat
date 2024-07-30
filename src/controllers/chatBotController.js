@@ -101,71 +101,77 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-async function callSendAPI(sender_psid, query) {
+function callSendAPI(sender_psid, query) {
     // Construct the message body
 
-    let res = await AskAI(query); //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;
-    
-    if (res == '' || res == undefined || res.body == undefined) {
-        console.log('It got here. But returning');
-        console.log(JSON.stringify(res));
-        return;
-    }
-
-    console.log(res.body);
-    console.log(JSON.stringify(res));
-    let chunk = res.split(/\r?\n/);
-    console.log('chunk len : '+ chunk.length)
-
-    let request_body = {
-        "recipient": {
-            "id": sender_psid
-        },
-        "message": { "text": chunk[0] }
-    };
-
-    console.log('It got here. I will send a reply: ', query);
-    const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
-    console.log("url: " + url);
-    // Send the HTTP request to the Messenger Platform
-    request({
-        "uri": url,
-        "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
-        "method": "POST",
-        "json": request_body
-    }, (err, res, body) => {
-        if (!err) {
-            console.log('message reply sent!');
-        } else {
-            console.error("Unable to send message:" + err);
+    AskAI(query).then(res => {
+        
+        if (res == '' || res == undefined || res.body == undefined) {
+            console.log('It got here. But returning');
+            console.log(JSON.stringify(res));
+            return;
         }
-    });
     
+        console.log(res.body);
+        console.log(JSON.stringify(res));
+        let chunk = res.split(/\r?\n/);
+        console.log('chunk len : '+ chunk.length)
+    
+        let request_body = {
+            "recipient": {
+                "id": sender_psid
+            },
+            "message": { "text": chunk[0] }
+        };
+    
+        console.log('It got here. I will send a reply: ', query);
+        const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
+        console.log("url: " + url);
+        // Send the HTTP request to the Messenger Platform
+        request({
+            "uri": url,
+            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+            "method": "POST",
+            "json": request_body
+        }, (err, res, body) => {
+            if (!err) {
+                console.log('message reply sent!');
+            } else {
+                console.error("Unable to send message:" + err);
+            }
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      }); 
+    //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;    
 }
 
 // Sends response messages via the Send API
-async function AskAI(query) {
+ function AskAI(query) {
     
     // Construct the message body
-    let request_body = {
-        "question": query,
-        "documentID": "GetFitGym-faqs"
-    };
+    return new Promise(resolve => {
+        let request_body = {
+            "question": query,
+            "documentID": "GetFitGym-faqs"
+        };
 
-    console.log('User query : ', query);
-    const url = "http://ai.primecrestfx.com/ai/api/MetaWebhook/SendIGResponse";
-    console.log("url: " + url);
-    // Send the HTTP request to the Messenger Platform
-   await request({
-        "uri": url,
-        "method": "POST",
-        "json": request_body
-    }, (err, res, body) => {
-        if (!err) {
-                return res.body;
-        } else {
-            console.error("Unable to send message:" + err);
-        }
+        console.log('User query : ', query);
+        const url = "http://ai.primecrestfx.com/ai/api/MetaWebhook/SendIGResponse";
+        console.log("url: " + url);
+        // Send the HTTP request to the Messenger Platform
+        request({
+            "uri": url,
+            "method": "POST",
+            "json": request_body
+        }, (err, res, body) => {
+            if (!err) {
+                    return resolve(res.body);
+            } else {
+                console.error("Unable to send message:" + err);
+            }
+        });
     });
     
 }
