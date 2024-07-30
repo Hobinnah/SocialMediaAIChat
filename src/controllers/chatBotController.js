@@ -112,7 +112,6 @@ function callSendAPI(sender_psid, query) {
             return;
         }
     
-        console.log(res.body);
         console.log(JSON.stringify(res));
         let chunk = res.split(/\r?\n/);
         console.log('chunk len : '+ chunk.length)
