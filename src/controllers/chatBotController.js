@@ -122,22 +122,17 @@ function callSendAPI(sender_psid, query) {
         console.log('It got here. I will send a reply: ', query);
         const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
         console.log("url: " + url);
-
-        let i = 0;
-        while(i < chunk.length) {
             
-            console.log(i +': ' + chunk[i]);
-            let request_body = {
-                "recipient": {
-                    "id": sender_psid
-                },
-                "message": { "text": chunk[i] }
-            };
+        console.log('AI Msg: ' + res);
+        let request_body = {
+            "recipient": {
+                "id": sender_psid
+            },
+            "message": { "text": res }
+        };
 
-           SendMessengeToMeta(request_body, url).then(res => {
-                i++;
-           });
-        }
+        SendMessengeToMeta(request_body, url);
+        
       })
       .catch(error => {
         console.error('Error fetching data:', error);
