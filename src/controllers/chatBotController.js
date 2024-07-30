@@ -27,7 +27,7 @@ export const postWebhook = (req, res) =>{
                 // Get the sender PSID 
                 let sender_psid = webhook_event.sender.id;
                 let message = "";
-                if (webhook_event.message.hasOwnProperty('text')) {
+                if (webhook_event.message !== undefined && webhook_event.message.hasOwnProperty('text')) {
                     message = webhook_event.message.text;
                 } else {
                     res.status(200).send('EVENT_RECEIVED');
