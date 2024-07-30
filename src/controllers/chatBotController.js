@@ -105,7 +105,7 @@ function handlePostback(sender_psid, received_postback) {
 function callSendAPI(sender_psid, query) {
     // Construct the message body
 
-    AskAI(query).then(res => {
+   AskAI(query).then(res => {
         
         console.log(res);
         console.log(JSON.stringify(res));
@@ -123,7 +123,8 @@ function callSendAPI(sender_psid, query) {
         const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
         console.log("url: " + url);
 
-        for(let i=0; i < chunk.length; i++) {
+        let i = 0;
+        while(i < chunk.length) {
             
             console.log(i +': ' + chunk[i]);
             let request_body = {
@@ -133,10 +134,9 @@ function callSendAPI(sender_psid, query) {
                 "message": { "text": chunk[i] }
             };
 
-            SendMessengeToMeta(request_body, url).then(res =>{  })
-            .catch(error => {
-                console.error('Error sending AI message :', error);
-            }); 
+           SendMessengeToMeta(request_body, url).then(res => {
+                i++;
+           });
         }
       })
       .catch(error => {
@@ -145,7 +145,7 @@ function callSendAPI(sender_psid, query) {
     //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;    
 }
 
-function SendMessengeToMeta(req, url) {
+async function SendMessengeToMeta(req, url) {
 
     return new Promise(resolve => { 
 
