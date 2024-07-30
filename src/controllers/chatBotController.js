@@ -105,7 +105,7 @@ function handlePostback(sender_psid, received_postback) {
 function callSendAPI(sender_psid, query) {
     // Construct the message body
 
-   AskAI(query).then(res => {
+    AskAI(query).then(res => {
         
         console.log(res);
         console.log(JSON.stringify(res));
@@ -116,23 +116,40 @@ function callSendAPI(sender_psid, query) {
         }
     
         console.log(JSON.stringify(res));
-        let chunk = res.split(/\r?\n/);
-        console.log('chunk len : '+ chunk.length)
+        let chunks = res.split(/\r?\n/);
+        console.log('chunk len : '+ chunks.length)
 
         console.log('It got here. I will send a reply: ', query);
         const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
         console.log("url: " + url);
-            
-        console.log('AI Msg: ' + res);
-        let request_body = {
-            "recipient": {
-                "id": sender_psid
-            },
-            "message": { "text": res }
-        };
 
-        SendMessengeToMeta(request_body, url);
-        
+        chunks.forEach((chunk) => {
+            setTimeout(() => {
+                
+                let request_body = {
+                    "recipient": {
+                        "id": sender_psid
+                    },
+                    "message": { "text": chunk }
+                };
+                     
+                // Send the HTTP request to the Messenger Platform
+                request({
+                    "uri": url,
+                    "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+                    "method": "POST",
+                    "json": request_body
+                }, (err, res, body) => {
+                    if (!err) {
+                        console.log('message reply sent!');
+                    } else {
+                        console.error("Unable to send message:" + err);
+                    }
+                });
+
+            },  1000); // 1-second interval
+        });
+
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -140,27 +157,6 @@ function callSendAPI(sender_psid, query) {
     //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;    
 }
 
-async function SendMessengeToMeta(req, url) {
-
-    return new Promise(resolve => { 
-
-        // Send the HTTP request to the Messenger Platform
-        request({
-            "uri": url,
-            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
-            "method": "POST",
-            "json": req
-        }, (err, res, body) => {
-            if (!err) {
-                console.log('message reply sent!');
-                return resolve();
-            } else {
-                console.error("Unable to send message:" + err);
-            }
-        });
-
-    });
-}
 
 // Sends response messages via the Send API
  function AskAI(query) {
