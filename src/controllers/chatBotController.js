@@ -21,18 +21,14 @@ export const postWebhook = (req, res) =>{
             // Gets the body of the webhook event
             console.log(entry);
             //if (entry.messaging !== undefined) {
-                let webhook_event = entry.messaging[0];
-                console.log('Event: ', webhook_event);
+            let webhook_event = entry.messaging[0];
+            console.log('Event: ', webhook_event);
 
-                // Get the sender PSID 
-                let sender_psid = webhook_event.sender.id;
-                let message = "";
-                if (webhook_event.message !== undefined && webhook_event.message.hasOwnProperty('text')) {
-                    message = webhook_event.message.text;
-                } else {
-                    res.status(200).send('EVENT_RECEIVED');
-                }
-                
+            // Get the sender PSID 
+            let sender_psid = webhook_event.sender.id;
+            let message = "";
+            if (webhook_event.message !== undefined && webhook_event.message.hasOwnProperty('text')) {
+                message = webhook_event.message.text;
                 console.log('Sender PSID: ' + sender_psid +'. registeredAccount: '+ registeredAccount +' message: '+ message);
                                 
                 // Check if the event is a message or postback and
@@ -50,7 +46,7 @@ export const postWebhook = (req, res) =>{
                 } else {
                     console.log('I wont reply');
                 }
-            //}
+            }
         });
 
         // Return a '200 OK' response to all events
