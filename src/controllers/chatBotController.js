@@ -147,7 +147,7 @@ function callSendAPI(sender_psid, query) {
                     }
                 });
 
-            },  1000); // 1-second interval
+            },  3500); // 1-second interval
         });
 
       })
