@@ -154,7 +154,7 @@ function callSendAPI(sender_psid, query) {
                     }
                 });
 
-            }, 5000); // 1-second interval
+            }, 30000); // 1-second interval
         }
 
       })
