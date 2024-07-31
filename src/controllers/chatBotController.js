@@ -138,8 +138,8 @@ function callSendAPI(sender_psid, query) {
                 };
                 
                 let now = new Date();
-                console.log("Happened at : " + now);
-                console.log("chunk : " + chunks[i]);
+                // console.log("Happened at : " + now);
+                // console.log("chunk : " + chunks[i]);
                 // Send the HTTP request to the Messenger Platform
                 request({
                     "uri": url,
