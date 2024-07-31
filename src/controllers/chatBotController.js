@@ -135,6 +135,7 @@ function callSendAPI(sender_psid, query) {
                 
                 let now = new Date();
                 console.log("Happened at : " + now);
+                console.log("chunk : " + chunk);
                 // Send the HTTP request to the Messenger Platform
                 request({
                     "uri": url,
@@ -149,7 +150,7 @@ function callSendAPI(sender_psid, query) {
                     }
                 });
 
-            },  3500); // 1-second interval
+            },  60000); // 1-second interval
         });
 
       })
