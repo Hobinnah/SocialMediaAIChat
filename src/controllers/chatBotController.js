@@ -127,14 +127,14 @@ function callSendAPI(sender_psid, query) {
         //     console.log(i +':  Msg: '+ chunks[i]);
         // }
 
-        for(let i = 0; i < chunks.length; i++) {
+        //for(let i = 0; i < chunks.length; i++) {
             setTimeout(() => {
                 
                 let request_body = {
                     "recipient": {
                         "id": sender_psid
                     },
-                    "message": { "text": chunks[i] }
+                    "message": { "text": res }
                 };
                 
                 let now = new Date();
@@ -154,8 +154,8 @@ function callSendAPI(sender_psid, query) {
                     }
                 });
 
-            }, 30000); // 1-second interval
-        }
+            }, 5000); // 1-second interval
+       // }
 
       })
       .catch(error => {
