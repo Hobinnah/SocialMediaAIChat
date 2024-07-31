@@ -116,52 +116,36 @@ function callSendAPI(sender_psid, query) {
         }
     
         console.log(JSON.stringify(res));
-        let chunks = res.split(/\r?\n/);
-        console.log('chunk len : '+ chunks.length)
+        //let chunks = res.split(/\r?\n/);
+        //console.log('chunk len : '+ chunks.length)
 
         console.log('It got here. I will send a reply: ', query);
         const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
         console.log("url: " + url);
-        // for(let i = 0; i < chunks.length; i++)
-        // {
-        //     console.log(i +':  Msg: '+ chunks[i]);
-        // }
-
-        //for(let i = 0; i < chunks.length; i++) {
-            setTimeout(() => {
-                
-                let request_body = {
-                    "recipient": {
-                        "id": sender_psid
-                    },
-                    "message": { "text": res }
-                };
-                
-                let now = new Date();
-                // console.log("Happened at : " + now);
-                // console.log("chunk : " + chunks[i]);
-                // Send the HTTP request to the Messenger Platform
-                request({
-                    "uri": url,
-                    "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
-                    "method": "POST",
-                    "json": request_body
-                }, (err, res, body) => {
-                    if (!err) {
-                        console.log('message reply sent!');
-                    } else {
-                        console.error("Unable to send message:" + err);
-                    }
-                });
-
-            }, 5000); // 1-second interval
-       // }
-
-      })
-      .catch(error => {
+        
+        let request_body = {
+            "recipient": {
+                "id": sender_psid
+            },
+            "message": { "text": res }
+        };
+        
+        request({
+            "uri": url,
+            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+            "method": "POST",
+            "json": request_body
+        }, (err, res, body) => {
+            if (!err) {
+                console.log('message reply sent!');
+            } else {
+                console.error("Unable to send message:" + err);
+            }
+        });
+    })
+    .catch(error => {
         console.error('Error fetching data:', error);
-      }); 
-    //`The bot needs more training, try to say "thanks a lot" or "hi" to the bot`;    
+    });  
 }
 
 
