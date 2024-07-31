@@ -132,7 +132,9 @@ function callSendAPI(sender_psid, query) {
                     },
                     "message": { "text": chunk }
                 };
-                     
+                
+                let now = new Date();
+                console.log("Happened at : " + now);
                 // Send the HTTP request to the Messenger Platform
                 request({
                     "uri": url,
