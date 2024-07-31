@@ -122,24 +122,24 @@ function callSendAPI(sender_psid, query) {
         console.log('It got here. I will send a reply: ', query);
         const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
         console.log("url: " + url);
-        for(let i = 0; i < chunks.length; i++)
-        {
-            console.log(i +':  Msg: '+ chunks[i]);
-        }
+        // for(let i = 0; i < chunks.length; i++)
+        // {
+        //     console.log(i +':  Msg: '+ chunks[i]);
+        // }
 
-        chunks.forEach((chunk) => {
+        for(let i = 0; i < chunks.length; i++) {
             setTimeout(() => {
                 
                 let request_body = {
                     "recipient": {
                         "id": sender_psid
                     },
-                    "message": { "text": chunk }
+                    "message": { "text": chunks[i] }
                 };
                 
                 let now = new Date();
                 console.log("Happened at : " + now);
-                console.log("chunk : " + chunk);
+                console.log("chunk : " + chunks[i]);
                 // Send the HTTP request to the Messenger Platform
                 request({
                     "uri": url,
@@ -154,8 +154,8 @@ function callSendAPI(sender_psid, query) {
                     }
                 });
 
-            },  5000); // 1-second interval
-        });
+            }, 5000); // 1-second interval
+        }
 
       })
       .catch(error => {
