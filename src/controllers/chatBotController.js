@@ -122,6 +122,10 @@ function callSendAPI(sender_psid, query) {
         console.log('It got here. I will send a reply: ', query);
         const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
         console.log("url: " + url);
+        for(let i = 0; i < chunks.length; i++)
+        {
+            console.log(i +':  Msg: '+ chunks[i]);
+        }
 
         chunks.forEach((chunk) => {
             setTimeout(() => {
@@ -150,7 +154,7 @@ function callSendAPI(sender_psid, query) {
                     }
                 });
 
-            },  60000); // 1-second interval
+            },  5000); // 1-second interval
         });
 
       })
