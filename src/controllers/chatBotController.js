@@ -18,14 +18,14 @@ export const postWebhook = (req, res) =>{
         "json": req.body
     }, (err, res, body) => {
         if (!err) {
-            console.log('message reply sent!');
+            console.log('C# API called. message reply sent!');
         } else {
             console.error("Unable to send message:" + err);
         }
     });
 
     res.status(200).send('EVENT_RECEIVED');
-    
+
     // Check the webhook event is from a Page subscription
     if (body.object === 'instagram' && body.entry !== undefined && body.entry.length > 0) { 
 
@@ -51,7 +51,7 @@ export const postWebhook = (req, res) =>{
                 {
                     if (webhook_event.message) {
                         console.log('handleMessage called');
-                        callSendAPI(sender_psid, message);
+                        //callSendAPI(sender_psid, message);
                         //handleMessage(sender_psid, webhook_event.message);
                     } else if (webhook_event.postback) {
                         console.log('handlePostback called');
