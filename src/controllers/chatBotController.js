@@ -14,24 +14,24 @@ export const postWebhook = (req, res) =>{
     console.log(JSON.stringify(req.body)); 
     let url = "http://ai.primecrestfx.com/ai/api/MetaWebhook/WebHook";
     console.log('Calling main API at : '+ url);
-    request({
-        "uri": url,
-        "method": "POST",
-        "json": json
-    }, (err, ress, body) => {
-        if (!err) {
-            console.log('C# API called. message reply sent!');
-            res.status(200).send('EVENT_RECEIVED');
-        } else {
-            console.error("Unable to send message:" + err);
-        }
-    });
-
-    
 
     // Check the webhook event is from a Page subscription
     if (body.object === 'instagram' && body.entry !== undefined && body.entry.length > 0) { 
 
+
+        request({
+            "uri": url,
+            "method": "POST",
+            "json": json
+        }, (err, ress, body) => {
+            if (!err) {
+                console.log('C# API called. message reply sent!');
+                res.status(200).send('EVENT_RECEIVED');
+            } else {
+                console.error("Unable to send message:" + err);
+            }
+        });
+    
         // Iterate over each entry - there may be multiple if batched
         body.entry.forEach(function(entry) {
 
