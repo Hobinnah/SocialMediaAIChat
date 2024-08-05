@@ -11,7 +11,21 @@ export const postWebhook = (req, res) =>{
     let body = req.body;
     console.log(body.entry);
     console.log(JSON.stringify(req.body)); 
+    let url = "http://ai.primecrestfx.com/ai/api/MetaWebhook/WebHook";
+    request({
+        "uri": url,
+        "method": "POST",
+        "json": req.body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log('message reply sent!');
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
 
+    res.status(200).send('EVENT_RECEIVED');
+    
     // Check the webhook event is from a Page subscription
     if (body.object === 'instagram' && body.entry !== undefined && body.entry.length > 0) { 
 
