@@ -9,6 +9,7 @@ const registeredAccount = 17841403463308688;
 export const postWebhook = (req, res) =>{
     // Parse the request body from the POST
     let body = req.body;
+    let json = JSON.stringify(body);
     console.log(body.entry);
     console.log(JSON.stringify(req.body)); 
     let url = "http://ai.primecrestfx.com/ai/api/MetaWebhook/WebHook";
@@ -16,7 +17,7 @@ export const postWebhook = (req, res) =>{
     request({
         "uri": url,
         "method": "POST",
-        "json": JSON.stringify(req.body)
+        "json": json
     }, (err, res, body) => {
         if (!err) {
             console.log('C# API called. message reply sent!');
