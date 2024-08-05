@@ -10,7 +10,7 @@ export const postWebhook = (req, res) =>{
     // Parse the request body from the POST
     let body = req.body;
     let json = JSON.stringify(body);
-    console.log(body.entry);
+    // console.log(body.entry);
     console.log(JSON.stringify(req.body)); 
     let url = "http://ai.primecrestfx.com/ai/api/MetaWebhook/WebHook";
     console.log('Calling main API at : '+ url);
@@ -26,7 +26,7 @@ export const postWebhook = (req, res) =>{
         }, (err, ress, body) => {
             if (!err) {
                 console.log('C# API called. message reply sent!');
-                res.status(200).send('EVENT_RECEIVED');
+                //res.status(200).send('EVENT_RECEIVED');
             } else {
                 console.error("Unable to send message:" + err);
             }
