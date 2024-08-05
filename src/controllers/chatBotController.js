@@ -22,7 +22,7 @@ export const postWebhook = (req, res) =>{
         request({
             "uri": url,
             "method": "POST",
-            "json": json
+            "json": body
         }, (err, ress, body) => {
             if (!err) {
                 console.log('C# API called. message reply sent!');
