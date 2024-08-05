@@ -12,6 +12,7 @@ export const postWebhook = (req, res) =>{
     console.log(body.entry);
     console.log(JSON.stringify(req.body)); 
     let url = "http://ai.primecrestfx.com/ai/api/MetaWebhook/WebHook";
+    console.log('Calling main API at : '+ url);
     request({
         "uri": url,
         "method": "POST",
