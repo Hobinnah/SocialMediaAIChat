@@ -51,7 +51,7 @@ export const postWebhook = (req, res) =>{
                 {
                     if (webhook_event.message) {
                         console.log('handleMessage called');
-                        callSendAPI(sender_psid, message);
+                        //callSendAPI(sender_psid, message);
                         //handleMessage(sender_psid, webhook_event.message);
                     } else if (webhook_event.postback) {
                         console.log('handlePostback called');
