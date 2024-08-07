@@ -98,6 +98,23 @@ export const getWebhook = (req, res) => {
     }
 };
 
+export const postIGMsgWebhook = (req, res) => {
+    // Your verify token. Should be a random string.
+    let VERIFY_TOKEN = process.env.MY_VERIFY_FB_TOKEN;
+    
+    // Parse the request body from the POST
+    let body = req.body;
+    console.log(JSON.stringify(body)); 
+    console.log('Calling postIGMsgWebhook');
+
+    res.status(200).send('OK');
+    // Checks if a token and mode is in the query string of the request
+   
+    // Responds with '403 Forbidden' if verify tokens do not match
+    // res.sendStatus(403);
+   
+};
+
 // Handles messaging_postbacks events
 function handlePostback(sender_psid, received_postback) {
     let response;
