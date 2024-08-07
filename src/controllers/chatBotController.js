@@ -123,6 +123,8 @@ export const postIGMsgWebhook = (req, res) => {
     }, (err, apiRes, body) => {
         if (!err) {
             console.log('IG: message reply sent!');
+            console.log(apiRes);
+            console.log(body);
             res.status(200).send('OK');
         } else {
             console.error("IG: Unable to send message:" + err);
