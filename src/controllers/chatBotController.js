@@ -112,7 +112,7 @@ export const postIGMsgWebhook = (req, res) => {
             "recipient": {
                 "id": body.recipient.id
             },
-            "message": { "text": body.messge.text }
+            "message": { "text": body.message.text }
         };
         
         request({
