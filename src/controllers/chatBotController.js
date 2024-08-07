@@ -99,15 +99,37 @@ export const getWebhook = (req, res) => {
 };
 
 export const postIGMsgWebhook = (req, res) => {
-    // Your verify token. Should be a random string.
-    let VERIFY_TOKEN = process.env.MY_VERIFY_FB_TOKEN;
     
     // Parse the request body from the POST
     let body = req.body;
     console.log(JSON.stringify(body)); 
     console.log('Calling postIGMsgWebhook');
 
-    res.status(200).send('OK');
+    const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
+        console.log("url: " + url);
+        
+        let request_body = {
+            "recipient": {
+                "id": body.recipient.id
+            },
+            "message": { "text": body.messge.text }
+        };
+        
+        request({
+            "uri": url,
+            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+            "method": "POST",
+            "json": request_body
+        }, (err, res, body) => {
+            if (!err) {
+                console.log('IG: message reply sent!');
+                res.status(200).send('OK');
+            } else {
+                console.error("IG: Unable to send message:" + err);
+            }
+        });
+
+    
     // Checks if a token and mode is in the query string of the request
    
     // Responds with '403 Forbidden' if verify tokens do not match
