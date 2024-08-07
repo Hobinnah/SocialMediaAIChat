@@ -108,29 +108,32 @@ export const postIGMsgWebhook = (req, res) => {
     const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
     console.log("url: " + url);
     
-    let request_body = {
-        "recipient": {
-            "id": body.recipient.id
-        },
-        "message": { "text": body.message.text }
-    };
+
+    if (JSON.stringify(body) !== '{}'){
+        let request_body = {
+            "recipient": {
+                "id": body.recipient.id
+            },
+            "message": { "text": body.message.text }
+        };
     
-    request({
-        "uri": url,
-        "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
-        "method": "POST",
-        "json": request_body
-    }, (err, apiRes, body) => {
-        if (!err) {
-            console.log('IG: message reply sent!');
-            console.log(apiRes);
-            console.log(body);
-            res.status(200).send('OK');
-        } else {
-            console.error("IG: Unable to send message:" + err);
-            res.sendStatus(403);
-        }
-    });
+        request({
+            "uri": url,
+            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+            "method": "POST",
+            "json": request_body
+        }, (err, apiRes, body) => {
+            if (!err) {
+                console.log('IG: message reply sent!');
+                console.log(apiRes);
+                console.log(body);
+                res.status(200).send('OK');
+            } else {
+                console.error("IG: Unable to send message:" + err);
+                res.sendStatus(403);
+            }
+        });
+    }
 };
 
 // Handles messaging_postbacks events
