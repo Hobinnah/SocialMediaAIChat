@@ -106,35 +106,29 @@ export const postIGMsgWebhook = (req, res) => {
     console.log('Calling postIGMsgWebhook');
 
     const url = "https://graph.instagram.com/v20.0/" + registeredAccount +"/messages";
-        console.log("url: " + url);
-        
-        let request_body = {
-            "recipient": {
-                "id": body.recipient.id
-            },
-            "message": { "text": body.message.text }
-        };
-        
-        request({
-            "uri": url,
-            "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
-            "method": "POST",
-            "json": request_body
-        }, (err, res, body) => {
-            if (!err) {
-                console.log('IG: message reply sent!');
-                res.status(200).send('OK');
-            } else {
-                console.error("IG: Unable to send message:" + err);
-            }
-        });
-
+    console.log("url: " + url);
     
-    // Checks if a token and mode is in the query string of the request
-   
-    // Responds with '403 Forbidden' if verify tokens do not match
-    // res.sendStatus(403);
-   
+    let request_body = {
+        "recipient": {
+            "id": body.recipient.id
+        },
+        "message": { "text": body.message.text }
+    };
+    
+    request({
+        "uri": url,
+        "qs": { "access_token": process.env.MY_VERIFY_FB_TOKEN },
+        "method": "POST",
+        "json": request_body
+    }, (err, apiRes, body) => {
+        if (!err) {
+            console.log('IG: message reply sent!');
+            res.status(200).send('OK');
+        } else {
+            console.error("IG: Unable to send message:" + err);
+            res.sendStatus(403);
+        }
+    });
 };
 
 // Handles messaging_postbacks events
